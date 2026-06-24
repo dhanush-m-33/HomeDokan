@@ -13,13 +13,20 @@
                 padding-top: 60px; 
             }
             .highlight-card .card{
-                background-color:#b7ffaf;
-                border:2px solid #127c06;
+                background-color:#fffea7;
+                border:2px solid #fbff00;
                 transform:scale(1.03);
                 transition:all .5s ease;
             }
             .card{
                 transition:all .5s ease;
+            }
+            .homedokan-product-card{
+                background-color:#e8f5e9;
+                transition:background-color .5s ease;
+            }
+            .highlight-card .homedokan-product-card{
+                background-color:#b7ffaf;
             }
         </style>
     </head>
@@ -27,7 +34,7 @@
 
         <div id="global-navbar"></div>
 
-        <section class="py-5" style="background-color: #e8f5e9;">
+        <section class="py-4" style="background-color: #e8f5e9;">
             <div class="container mt-4">
                                 <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-4">
                     <div class="mb-3 mb-lg-0">
@@ -216,14 +223,13 @@
             ];
 
             const container = document.getElementById("productsContainer");
-            products.forEach(product => {
-                const stockBadge = product.stock === "Low Stock"
-                    ? `<span class="badge bg-warning text-dark rounded-pill">${product.stock}</span>`
-                    : `<span class="badge bg-success-subtle text-dark rounded-pill">${product.stock}</span>`;
-
+                products.forEach(product => {
+                    const stockBadge = product.stock === "Low Stock"
+                        ? `<span class="badge bg-warning text-dark rounded-pill">${product.stock}</span>`
+                        : `<span class="badge bg-success-subtle text-dark rounded-pill">${product.stock}</span>`;
                 container.innerHTML += `
                     <div class="col-12 col-sm-6 col-md-4 col-lg-3" id="${product.id}">
-                        <div class="card h-100 shadow-sm border-0" style="background-color: #e8f5e9;">
+                        <div class="card homedokan-product-card h-100 shadow-sm border-0">
                             <div class="card-body pb-2">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                     <p class="text-warning small fw-bold mb-0 text-uppercase">${product.category}</p>
@@ -238,7 +244,7 @@
                                     ${product.description}
                                 </p>
                             </div>
-                            <div class="card-footer border-top-0 pt-0" style="background-color: #e8f5e9;">
+                            <div class="card-footer border-top-0 pt-0 homedokan-product-card">
                                 <button class="btn btn-success add-to-cart-btn w-100">
                                     Add to Cart
                                 </button>
@@ -275,7 +281,6 @@
                     button.textContent = "Add to Cart";
                     return;
                 }
-
                 button.className = "btn btn-success btn-sm add-to-cart-btn py-2 w-100 px-0";
                 button.innerHTML = `
                     <div class="d-flex align-items-center justify-content-center w-100">
@@ -360,25 +365,38 @@
                 }
             });
             updateCartIcon();
+
+            document.getElementById("searchInput").addEventListener("keydown", function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    searchProduct();
+                }
+            });
+
             function searchProduct() {
                 const search = document.getElementById("searchInput").value.trim().toLowerCase();
-                const product = products.find(p => p.name.toLowerCase().includes(search));
-                if (!product) {
+                if (!search) return;
+                const matches = products.filter(p => p.name.toLowerCase().includes(search));
+                if (matches.length === 0) {
                     alert("Product not found!");
                     return;
                 }
-                
-                const productCard = document.getElementById(product.id);           // scroll to item
-                productCard.scrollIntoView({
+                const firstCard = document.getElementById(matches[0].id);                  // scroll to first match
+                firstCard.scrollIntoView({
                     behavior: "smooth",
                     block: "center"
                 });
                 setTimeout(() => {
-                    productCard.classList.add("highlight-card");
+                    matches.forEach(match => {                                             // highlight every match
+                        const card = document.getElementById(match.id);
+                        card.classList.add("highlight-card");
+                    });
                     setTimeout(() => {
-                        productCard.classList.remove("highlight-card");
+                        matches.forEach(match => {
+                            document.getElementById(match.id).classList.remove("highlight-card");
+                        });
                     }, 500);
-                }, 400);
+                }, 500);
             }
         </script>
 
