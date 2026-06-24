@@ -29,8 +29,7 @@
 
         <section class="py-5" style="background-color: #e8f5e9;">
             <div class="container mt-4">
-
-                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-4">
+                                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-4">
                     <div class="mb-3 mb-lg-0">
                         <p class="text-warning mb-1 fw-bold">Shop</p>
                         <h1 class="fw-bold">All Products</h1>
@@ -61,7 +60,7 @@
                     </div>
                 </div> -->
 
-                <div class="row g-3 mb-5">
+                <div class="row g-3 mb-2">
                     <div class="col-12 col-sm-6 col-md-4 col-lg-2">
                         <div class="card border-0 shadow-sm text-center p-3 h-100">
                             <div class="fs-1">🥦</div>
@@ -105,6 +104,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section class="py-5">
+            <div class="container">
 
 
                 <div class="row g-4" id="productsContainer"> <!--new-->
@@ -211,28 +215,33 @@
 
             ];
 
-            const container=document.getElementById("productsContainer");
-            products.forEach(product=>{
-                container.innerHTML+=`
+            const container = document.getElementById("productsContainer");
+            products.forEach(product => {
+                const stockBadge = product.stock === "Low Stock"
+                    ? `<span class="badge bg-warning text-dark rounded-pill">${product.stock}</span>`
+                    : `<span class="badge bg-success-subtle text-dark rounded-pill">${product.stock}</span>`;
+
+                container.innerHTML += `
                     <div class="col-12 col-sm-6 col-md-4 col-lg-3" id="${product.id}">
-                        <div class="card h-100 shadow-sm">
-                            <div class="card-body">
-                                <p class="text-warning mb-1">${product.category}</p>
-                                <h5 class="card-title">${product.name}</h5>
-                                <p class="card-text text-success fw-bold">
-                                    ₹${product.price} / ${product.unit}
+                        <div class="card h-100 shadow-sm border-0" style="background-color: #e8f5e9;">
+                            <div class="card-body pb-2">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <p class="text-warning small fw-bold mb-0 text-uppercase">${product.category}</p>
+                                    ${stockBadge}
+                                </div>
+                                <h5 class="card-title mb-2">${product.name}</h5>
+                                <p class="card-text mb-2">
+                                    <span class="fs-5 fw-bold text-success">₹${product.price}</span>
+                                    <span class="text-muted small"> / ${product.unit}</span>
                                 </p>
-                                <p class="text-muted">
+                                <p class="text-muted small mb-0">
                                     ${product.description}
                                 </p>
                             </div>
-                            <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center">
-                                <button class="btn btn-success btn-sm add-to-cart-btn py-2 w-100 px-0">
+                            <div class="card-footer border-top-0 pt-0" style="background-color: #e8f5e9;">
+                                <button class="btn btn-success add-to-cart-btn w-100">
                                     Add to Cart
                                 </button>
-                                <small class="text-muted px-2">
-                                    ${product.stock}
-                                </small>
                             </div>
                         </div>
                     </div>
